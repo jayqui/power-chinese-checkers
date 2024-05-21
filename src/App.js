@@ -46,19 +46,31 @@ squareCoordinates.forEach((sq) => {
 });
 
 
-const bottomPlayerCoordinates = ["A13", "B12", "B14", "C11", "C13", "C15", "D10", "D12", "D14", "D16"];
-const topPlayerCoordinates = ["Q13", "P12", "P14", "O11", "O13", "O15", "N10", "N12", "N14", "N16"];
-const tempRedCoordinates = ["H14"]
-const tempBlueCoordinates = ["I15"]
-
-bottomPlayerCoordinates.forEach(c => squares[c].marbleColor = 'red');
-topPlayerCoordinates.forEach(c => squares[c].marbleColor = 'blue');
-tempRedCoordinates.forEach(c => squares[c].marbleColor = 'green');
-tempBlueCoordinates.forEach(c => squares[c].marbleColor = 'white');
+const BOTTOM_PLAYER_START_COORDINATES = ['A13', 'B12', 'B14', 'C11', 'C13', 'C15', 'D10', 'D12', 'D14', 'D16'];
+const TOP_PLAYER_START_COORDINATES = ['Q13', 'P12', 'P14', 'O11', 'O13', 'O15', 'N10', 'N12', 'N14', 'N16'];
+const TOP_LEFT_PLAYER_START_COORDINATES = ['M1', 'M3', 'M5', 'M7', 'L2', 'L4', 'L6', 'K3', 'K5', 'J4']
+const TOP_RIGHT_PLAYER_START_COORDINATES = ['M19', 'M21', 'M23', 'M25', 'L20', 'L22', 'L24', 'K21', 'K23', 'J22']
+const BOTTOM_LEFT_PLAYER_START_COORDINATES = ['E1', 'E3', 'E5', 'E7', 'F2', 'F4', 'F6', 'G3', 'G5', 'H4']
+const BOTTOM_RIGHT_PLAYER_START_COORDINATES = ['E19', 'E21', 'E23', 'E25', 'F20', 'F22', 'F24', 'G21', 'G23', 'H22']
+// const tempRedStartCoordinates = ["H14"]
+// const tempBlueStartCoordinates = ["I15"]
 
 function App() {
-
+  // TODO: allow to be dynamically set as part of intro/setup sequence
+  const PLAYERS = ['red', 'blue', 'green', 'yellow', 'white', 'purple'];
+  const [whoseTurn, setWhoseTurn] = useState(PLAYERS[0]);
   const [selectedSquare, setSelectedSquare] = useState(null);
+
+  [
+    BOTTOM_PLAYER_START_COORDINATES,
+    TOP_PLAYER_START_COORDINATES,
+    TOP_LEFT_PLAYER_START_COORDINATES,
+    TOP_RIGHT_PLAYER_START_COORDINATES,
+    BOTTOM_LEFT_PLAYER_START_COORDINATES,
+    BOTTOM_RIGHT_PLAYER_START_COORDINATES,
+  ].forEach((coordinateList, index) => {
+    coordinateList.forEach(c => squares[c].marbleColor = PLAYERS[index]);
+  })
 
   function handleSquareClick(squareIdentifier) {
     if (squareCoordinates.includes(squareIdentifier)) {
@@ -68,6 +80,9 @@ function App() {
 
   return (
     <div className="App">
+      <div className={`WhoseTurnBox SquareColor--${whoseTurn}`}>
+        {whoseTurn}'s turn!
+      </div>
       {[...Array(17).keys()].map((squareLetter) =>
         (<div className="Row" key={squareLetter}>
             {[...Array(25).keys()].map((squareNumber) => (
