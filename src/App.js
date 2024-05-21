@@ -73,7 +73,9 @@ function App() {
   })
 
   function handleSquareClick(squareIdentifier) {
-    if (squareCoordinates.includes(squareIdentifier)) {
+    const squareObj = squares[squareIdentifier];
+
+    if (whoseTurn === squareObj?.marbleColor) {
       setSelectedSquare(squareIdentifier);
     }
   }
