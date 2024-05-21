@@ -1,7 +1,7 @@
 import './App.css';
 
 const squares = {};
-const mySquares = [
+const squareCoordinates = [
   "A13",
   "B12", "B14",
   "C11", "C13", "C15",
@@ -20,15 +20,36 @@ const mySquares = [
   "P12", "P14",
   "Q13",
 ]
-mySquares.forEach(sq => squares[sq] = []);
+squareCoordinates.forEach((sq) => {
+  const squareObj = {
+    marbleColor: null,
+    neigbhors: [],
+  }
+
+  const letter = sq[0];
+  const prevLetter = String.fromCharCode(letter.charCodeAt(0) - 1);
+  const nextLetter = String.fromCharCode(letter.charCodeAt(0) + 1);
+  const number = Number(sq.slice(1));
+  const prevNumber = number - 1;
+  const nextNumber = number + 1;
+
+  if (squareCoordinates.includes(prevLetter + prevNumber)) { squareObj.neigbhors.push(prevLetter + prevNumber) }
+  if (squareCoordinates.includes(prevLetter + nextNumber)) { squareObj.neigbhors.push(prevLetter + nextNumber) }
+  if (squareCoordinates.includes(letter + (number - 2))) { squareObj.neigbhors.push(letter + (number - 2)) }
+  if (squareCoordinates.includes(letter + (number + 2))) { squareObj.neigbhors.push(letter + (number + 2)) }
+  if (squareCoordinates.includes(nextLetter + prevNumber)) { squareObj.neigbhors.push(nextLetter + prevNumber) }
+  if (squareCoordinates.includes(nextLetter + nextNumber)) { squareObj.neigbhors.push(nextLetter + nextNumber) }
+
+  squares[sq] = squareObj;
+});
 
 function App() {
   return (
     <div className="App">
       {[...Array(17).keys()].map((x) =>
-        (<div className="Row">
+        (<div className="Row" key={x}>
             {[...Array(25).keys()].map((y) => (
-              <Square letter={String.fromCharCode('Q'.charCodeAt(0) - x) + (y + 1)} />
+              <Square key={y} letter={String.fromCharCode('Q'.charCodeAt(0) - x) + (y + 1)} />
             ))}
         </div>))}
     </div>
