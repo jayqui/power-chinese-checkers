@@ -33,6 +33,13 @@
   cursor: pointer;
 }
 
+.SquareColor--red { background-color: red; }
+.SquareColor--blue { background-color: blue; }
+.SquareColor--green { background-color: green; }
+.SquareColor--white { background-color: white; }
+.SquareColor--yellow { background-color: yellow; }
+.SquareColor--purple { background-color: purple; }
+
 .SelectedSquare {
   border: 2px yellow dashed;
 }

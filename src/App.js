@@ -45,6 +45,11 @@ squareCoordinates.forEach((sq) => {
   squares[sq] = squareObj;
 });
 
+
+const bottomPlayerCoordinates = ["A13", "B12", "B14", "C11", "C13", "C15", "D10", "D12", "D14", "D16"];
+
+bottomPlayerCoordinates.forEach(c => squares[c].marbleColor = 'green');
+
 function App() {
   const [selectedSquare, setSelectedSquare] = useState(null);
 
@@ -73,10 +78,20 @@ function App() {
 }
 
 function Square({ handleSquareClick, squareIdentifier, selectedSquare }) {
+  const isSelected = squareIdentifier === selectedSquare;
+  const squareObj = squares[squareIdentifier];
+
+  if (isSelected) {
+    // console.log('squareObj', squareObj);
+    // console.log('squareObj.marbleColor', squareObj.marbleColor);
+    // console.log('squareObj.marbleColor !== null', squareObj.marbleColor !== null);
+  }
+
   const isBoardSquare = Object.keys(squares).includes(squareIdentifier);
   let className = "Square";
   if (isBoardSquare) className += " BoardSquare";
-  if (squareIdentifier === selectedSquare) className += " SelectedSquare";
+  if (isSelected) className += " SelectedSquare";
+  if (squareObj && squareObj.marbleColor !== null) className += ` SquareColor--${squareObj.marbleColor}`;
 
   return(
     <span
