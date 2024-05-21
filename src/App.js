@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import './App.css';
 
 const squares = {};
@@ -23,7 +25,7 @@ const squareCoordinates = [
 squareCoordinates.forEach((sq) => {
   const squareObj = {
     marbleColor: null,
-    neigbhors: [],
+    neighbors: [],
   }
 
   const letter = sq[0];
@@ -33,37 +35,55 @@ squareCoordinates.forEach((sq) => {
   const prevNumber = number - 1;
   const nextNumber = number + 1;
 
-  if (squareCoordinates.includes(prevLetter + prevNumber)) { squareObj.neigbhors.push(prevLetter + prevNumber) }
-  if (squareCoordinates.includes(prevLetter + nextNumber)) { squareObj.neigbhors.push(prevLetter + nextNumber) }
-  if (squareCoordinates.includes(letter + (number - 2))) { squareObj.neigbhors.push(letter + (number - 2)) }
-  if (squareCoordinates.includes(letter + (number + 2))) { squareObj.neigbhors.push(letter + (number + 2)) }
-  if (squareCoordinates.includes(nextLetter + prevNumber)) { squareObj.neigbhors.push(nextLetter + prevNumber) }
-  if (squareCoordinates.includes(nextLetter + nextNumber)) { squareObj.neigbhors.push(nextLetter + nextNumber) }
+  if (squareCoordinates.includes(prevLetter + prevNumber)) { squareObj.neighbors.push(prevLetter + prevNumber) }
+  if (squareCoordinates.includes(prevLetter + nextNumber)) { squareObj.neighbors.push(prevLetter + nextNumber) }
+  if (squareCoordinates.includes(letter + (number - 2))) { squareObj.neighbors.push(letter + (number - 2)) }
+  if (squareCoordinates.includes(letter + (number + 2))) { squareObj.neighbors.push(letter + (number + 2)) }
+  if (squareCoordinates.includes(nextLetter + prevNumber)) { squareObj.neighbors.push(nextLetter + prevNumber) }
+  if (squareCoordinates.includes(nextLetter + nextNumber)) { squareObj.neighbors.push(nextLetter + nextNumber) }
 
   squares[sq] = squareObj;
 });
 
 function App() {
+  const [selectedSquare, setSelectedSquare] = useState(null);
+
+  function handleSquareClick(squareIdentifier) {
+    if (squareCoordinates.includes(squareIdentifier)) {
+      setSelectedSquare(squareIdentifier);
+      console.log('squares[squareIdentifier].neighbors', squares[squareIdentifier].neighbors);
+    }
+  }
+
   return (
     <div className="App">
-      {[...Array(17).keys()].map((x) =>
-        (<div className="Row" key={x}>
-            {[...Array(25).keys()].map((y) => (
-              <Square key={y} letter={String.fromCharCode('Q'.charCodeAt(0) - x) + (y + 1)} />
+      {[...Array(17).keys()].map((squareLetter) =>
+        (<div className="Row" key={squareLetter}>
+            {[...Array(25).keys()].map((squareNumber) => (
+              <Square
+                key={squareNumber}
+                selectedSquare={selectedSquare} // TODO: introduce state handling, e.g. React Context
+                handleSquareClick={handleSquareClick}
+                squareIdentifier={String.fromCharCode('Q'.charCodeAt(0) - squareLetter) + (squareNumber + 1)}
+              />
             ))}
         </div>))}
     </div>
   );
 }
 
-function Square({ letter }) {
-  const isBoardSquare = Object.keys(squares).includes(letter);
+function Square({ handleSquareClick, squareIdentifier, selectedSquare }) {
+  const isBoardSquare = Object.keys(squares).includes(squareIdentifier);
   let className = "Square";
-  if (isBoardSquare) { className += " BoardSquare"; }
+  if (isBoardSquare) className += " BoardSquare";
+  if (squareIdentifier === selectedSquare) className += " SelectedSquare";
 
   return(
-    <span className={className}>
-      {isBoardSquare && letter}
+    <span
+      onClick={() => handleSquareClick(squareIdentifier)}
+      className={className}
+    >
+      {isBoardSquare && squareIdentifier}
     </span>
   )
 }
