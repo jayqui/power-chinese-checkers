@@ -47,16 +47,22 @@ squareCoordinates.forEach((sq) => {
 
 
 const bottomPlayerCoordinates = ["A13", "B12", "B14", "C11", "C13", "C15", "D10", "D12", "D14", "D16"];
+const topPlayerCoordinates = ["Q13", "P12", "P14", "O11", "O13", "O15", "N10", "N12", "N14", "N16"];
+const tempRedCoordinates = ["H14"]
+const tempBlueCoordinates = ["I15"]
 
-bottomPlayerCoordinates.forEach(c => squares[c].marbleColor = 'green');
+bottomPlayerCoordinates.forEach(c => squares[c].marbleColor = 'red');
+topPlayerCoordinates.forEach(c => squares[c].marbleColor = 'blue');
+tempRedCoordinates.forEach(c => squares[c].marbleColor = 'green');
+tempBlueCoordinates.forEach(c => squares[c].marbleColor = 'white');
 
 function App() {
+
   const [selectedSquare, setSelectedSquare] = useState(null);
 
   function handleSquareClick(squareIdentifier) {
     if (squareCoordinates.includes(squareIdentifier)) {
       setSelectedSquare(squareIdentifier);
-      console.log('squares[squareIdentifier].neighbors', squares[squareIdentifier].neighbors);
     }
   }
 
@@ -77,21 +83,18 @@ function App() {
   );
 }
 
+ // TODO: get selectedSquare from a state tree, e.g. a React Context
 function Square({ handleSquareClick, squareIdentifier, selectedSquare }) {
   const isSelected = squareIdentifier === selectedSquare;
   const squareObj = squares[squareIdentifier];
-
-  if (isSelected) {
-    // console.log('squareObj', squareObj);
-    // console.log('squareObj.marbleColor', squareObj.marbleColor);
-    // console.log('squareObj.marbleColor !== null', squareObj.marbleColor !== null);
-  }
-
+  const selectedSquareObj = squares[selectedSquare];
   const isBoardSquare = Object.keys(squares).includes(squareIdentifier);
   let className = "Square";
   if (isBoardSquare) className += " BoardSquare";
   if (isSelected) className += " SelectedSquare";
   if (squareObj && squareObj.marbleColor !== null) className += ` SquareColor--${squareObj.marbleColor}`;
+  // TODO: fix logic — not all neighbors are legal moves!!
+  if (selectedSquareObj && selectedSquareObj.neighbors.includes(squareIdentifier)) className += " LegalMove";
 
   return(
     <span
