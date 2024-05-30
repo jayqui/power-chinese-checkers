@@ -30,7 +30,7 @@ squareCoordinates.forEach((sq) => {
 });
 
 
-const BOTTOM_PLAYER_START_COORDINATES = ['A13', 'G11', 'G9', 'C11', 'C13', 'H8', 'H10', 'H12', 'D14', 'D16'];
+const BOTTOM_PLAYER_START_COORDINATES = ['A13', 'G11', 'K13', 'G7', 'I11', 'H8', 'H10', 'H12', 'D14', 'D16'];
 const TOP_PLAYER_START_COORDINATES = ['Q13', 'P12', 'P14', 'O11', 'O13', 'O15', 'N10', 'N12', 'N14', 'N16'];
 const TOP_LEFT_PLAYER_START_COORDINATES = ['M1', 'M3', 'M5', 'M7', 'L2', 'L4', 'L6', 'K3', 'K5', 'J4']
 const TOP_RIGHT_PLAYER_START_COORDINATES = ['M19', 'M21', 'M23', 'M25', 'L20', 'L22', 'L24', 'K21', 'K23', 'J22']
@@ -91,35 +91,39 @@ function getLegalMoves({ selectedSquare }) {
   const letter = selectedSquare[0];
   const number = Number(selectedSquare.slice(1));
 
-  const addToLegalMovesIfApplicable = (candidateSquare) => {
-    if (squareCoordinates.includes(candidateSquare)) {
-      let shouldInclude = false;
-      if (squares[candidateSquare].marbleColor === null) shouldInclude = true;
-      if (shouldInclude === true)legalMoves.push(candidateSquare);
-    }
-  }
+  const squareFinderPrinciples = [
+    { letter: 0, number: -2 }, // left
+    { letter: 0, number: 2 }, // right
+    { letter: -1, number: -1 }, // left backward
+    { letter: -1, number: 1 }, // right backward
+    { letter: 1, number: -1 }, // left forward
+    { letter: 1, number: 1 }, // right forward
+  ];
 
-  // Left
-  const leftCandidate = letter + (number - 2);
-  addToLegalMovesIfApplicable(leftCandidate);
-  // Right
-  const rightCandidate = letter + (number + 2);
-  addToLegalMovesIfApplicable(rightCandidate);
-  // Left Backward
-  const prevLetter = String.fromCharCode(letter.charCodeAt(0) - 1);
-  const leftBackwardCandidate = prevLetter + (number - 1);
-  addToLegalMovesIfApplicable(leftBackwardCandidate);
-  // Right Backward
-  const rightBackwardCandidate = prevLetter + (number + 1);
-  addToLegalMovesIfApplicable(rightBackwardCandidate);
-  // Left Forward
-  const nextLetter = String.fromCharCode(letter.charCodeAt(0) + 1);
-  const leftForwardCandidate = nextLetter + (number - 1);
-  addToLegalMovesIfApplicable(leftForwardCandidate);
+  const letterFinderFunc = (n) => String.fromCharCode(letter.charCodeAt(0) + n);
+  const numberFinderFunc = (n) => number + n;
 
-  // Right Forward
-  const rightForwardCandidate = nextLetter + (number + 1);
-  addToLegalMovesIfApplicable(rightForwardCandidate);
+  squareFinderPrinciples.forEach((principle) => {
+    let letterShift = principle.letter;
+    let numberShift = principle.number;
+    let candidateSquare = letterFinderFunc(letterShift) + numberFinderFunc(numberShift);
+
+    const isOnBoard = (square) => squareCoordinates.includes(square);
+    const isEmpty = (square) => squares[square].marbleColor === null;
+    const isEmptyBoardSquare = (square) => isOnBoard(square) && isEmpty(square);
+
+    if (isEmptyBoardSquare(candidateSquare)) {
+      legalMoves.push(candidateSquare)
+    } else {
+      letterShift += principle.letter;
+      numberShift += principle.number;
+      candidateSquare = letterFinderFunc(letterShift) + numberFinderFunc(numberShift);
+
+      if (isEmptyBoardSquare(candidateSquare)) {
+        legalMoves.push(candidateSquare)
+      }
+    };
+  });
 
   return legalMoves;
 }
