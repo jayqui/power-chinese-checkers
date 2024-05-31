@@ -58,7 +58,11 @@ function App() {
     const squareObj = squares[squareIdentifier];
 
     if (whoseTurn === squareObj?.marbleColor) {
-      setSelectedSquare(squareIdentifier);
+      if (squareIdentifier === selectedSquare) {
+        setSelectedSquare(null); // deselect
+      } else {
+        setSelectedSquare(squareIdentifier);
+      }
     }
   }
 
