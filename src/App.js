@@ -30,14 +30,14 @@ function App() {
     coordinateList.forEach(c => SQUARES[c].marbleColor = PLAYERS[inde]);
   })
 
-  function handleSquareClick(squareIdentifier) {
-    const squareObj = SQUARES[squareIdentifier];
+  function handleSquareClick(clickedSquareIdentifier) {
+    const squareObj = SQUARES[clickedSquareIdentifier];
 
     if (whoseTurn === squareObj?.marbleColor) {
-      if (squareIdentifier === selectedSquare) {
+      if (clickedSquareIdentifier === selectedSquare) {
         setSelectedSquare(null); // deselect
       } else {
-        setSelectedSquare(squareIdentifier);
+        setSelectedSquare(clickedSquareIdentifier);
       }
     }
   }
@@ -54,7 +54,7 @@ function App() {
                 key={squareNumber}
                 selectedSquare={selectedSquare} // TODO: introduce state handling, e.g. React Context
                 handleSquareClick={handleSquareClick}
-                squareIdentifier={String.fromCharCode('Q'.charCodeAt(0) - squareLetter) + (squareNumber + 1)}
+                clickedSquareIdentifier={String.fromCharCode('Q'.charCodeAt(0) - squareLetter) + (squareNumber + 1)}
               />
             ))}
         </div>))}

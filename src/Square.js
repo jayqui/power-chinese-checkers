@@ -2,10 +2,10 @@ import { SQUARES } from './constants';
 import getLegalMoves from './utils/getLegalMoves';
 
  // TODO: get selectedSquare from a state tree, e.g. a React Context
-export default function Square({ handleSquareClick, squareIdentifier, selectedSquare }) {
-  const isSelected = squareIdentifier === selectedSquare;
-  const squareObj = SQUARES[squareIdentifier];
-  const isBoardSquare = Object.keys(SQUARES).includes(squareIdentifier);
+export default function Square({ handleSquareClick, clickedSquareIdentifier, selectedSquare }) {
+  const isSelected = clickedSquareIdentifier === selectedSquare;
+  const squareObj = SQUARES[clickedSquareIdentifier];
+  const isBoardSquare = Object.keys(SQUARES).includes(clickedSquareIdentifier);
   let className = "Square";
   if (isBoardSquare) className += " BoardSquare";
   if (isSelected) className += " SelectedSquare";
@@ -13,14 +13,14 @@ export default function Square({ handleSquareClick, squareIdentifier, selectedSq
 
   const legalMoves = getLegalMoves({ selectedSquare });
 
-  if (legalMoves.includes(squareIdentifier)) className += " LegalMove";
+  if (legalMoves.includes(clickedSquareIdentifier)) className += " LegalMove";
 
   return(
     <span
-      onClick={() => handleSquareClick(squareIdentifier)}
+      onClick={() => handleSquareClick(clickedSquareIdentifier)}
       className={className}
     >
-      {isBoardSquare && squareIdentifier}
+      {isBoardSquare && clickedSquareIdentifier}
     </span>
   )
 }
