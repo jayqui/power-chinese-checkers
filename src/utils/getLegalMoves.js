@@ -1,4 +1,6 @@
-export default function getLegalMoves({ selectedSquare, squareCoordinates, squares }) {
+import { SQUARES, SQUARE_COORDINATES } from '../constants';
+
+export default function getLegalMoves({ selectedSquare }) {
   if (!selectedSquare) return [];
 
   const legalMoves = [];
@@ -23,8 +25,8 @@ export default function getLegalMoves({ selectedSquare, squareCoordinates, squar
     let numberShift = principle.number;
     let candidateSquare = letterFinderFunc(letterShift) + numberFinderFunc(numberShift);
 
-    const isOnBoard = (square) => squareCoordinates.includes(square);
-    const isEmpty = (square) => squares[square].marbleColor === null;
+    const isOnBoard = (square) => SQUARE_COORDINATES.includes(square);
+    const isEmpty = (square) => SQUARES[square].marbleColor === null;
     const isEmptyBoardSquare = (square) => isOnBoard(square) && isEmpty(square);
 
     if (isEmptyBoardSquare(candidateSquare)) {
