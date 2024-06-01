@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import getLegalMoves from './utils/getLegalMoves.js';
 
 import './App.css';
 
@@ -76,7 +77,7 @@ function App() {
             {[...Array(25).keys()].map((squareNumber) => (
               <Square
                 key={squareNumber}
-                selectedSquare={selectedSquare} // TODO: introduce state handling, e.g. React Contet
+                selectedSquare={selectedSquare} // TODO: introduce state handling, e.g. React Context
                 handleSquareClick={handleSquareClick}
                 squareIdentifier={String.fromCharCode('Q'.charCodeAt(0) - squareLetter) + (squareNumber + 1)}
               />
@@ -86,53 +87,7 @@ function App() {
   );
 }
 
-// TODO: get selectedSquare from a state tree, e.g. a React Contet
-function getLegalMoves({ selectedSquare }) {
-  if (!selectedSquare) return [];
-
-  const legalMoves = [];
-
-  const letter = selectedSquare[0];
-  const number = Number(selectedSquare.slice(1));
-
-  const squareFinderPrinciples = [
-    { letter: 0, number: -2 }, // left
-    { letter: 0, number: 2 }, // right
-    { letter: -1, number: -1 }, // left backward
-    { letter: -1, number: 1 }, // right backward
-    { letter: 1, number: -1 }, // left forward
-    { letter: 1, number: 1 }, // right forward
-  ];
-
-  const letterFinderFunc = (n) => String.fromCharCode(letter.charCodeAt(0) + n);
-  const numberFinderFunc = (n) => number + n;
-
-  squareFinderPrinciples.forEach((principle) => {
-    let letterShift = principle.letter;
-    let numberShift = principle.number;
-    let candidateSquare = letterFinderFunc(letterShift) + numberFinderFunc(numberShift);
-
-    const isOnBoard = (square) => squareCoordinates.includes(square);
-    const isEmpty = (square) => squares[square].marbleColor === null;
-    const isEmptyBoardSquare = (square) => isOnBoard(square) && isEmpty(square);
-
-    if (isEmptyBoardSquare(candidateSquare)) {
-      legalMoves.push(candidateSquare)
-    } else {
-      letterShift += principle.letter;
-      numberShift += principle.number;
-      candidateSquare = letterFinderFunc(letterShift) + numberFinderFunc(numberShift);
-
-      if (isEmptyBoardSquare(candidateSquare)) {
-        legalMoves.push(candidateSquare)
-      }
-    };
-  });
-
-  return legalMoves;
-}
-
- // TODO: get selectedSquare from a state tree, e.g. a React Contet
+ // TODO: get selectedSquare from a state tree, e.g. a React Context
 function Square({ handleSquareClick, squareIdentifier, selectedSquare }) {
   const isSelected = squareIdentifier === selectedSquare;
   const squareObj = squares[squareIdentifier];
@@ -142,7 +97,7 @@ function Square({ handleSquareClick, squareIdentifier, selectedSquare }) {
   if (isSelected) className += " SelectedSquare";
   if (squareObj && squareObj.marbleColor !== null) className += ` SquareColor--${squareObj.marbleColor}`;
 
-  const legalMoves = getLegalMoves({ selectedSquare });
+  const legalMoves = getLegalMoves({ selectedSquare, squareCoordinates, squares });
 
   if (legalMoves.includes(squareIdentifier)) className += " LegalMove";
 
