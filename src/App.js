@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import getLegalMoves, { isEmptyBoardSquare } from './utils/getLegalMoves.js';
+import getLegalMoves from './utils/getLegalMoves.js';
 import Square from './Square.js';
 import {
   PLAYERS,
@@ -28,8 +28,15 @@ function App() {
 
     // move marble
     const legalMoves = getLegalMoves({ selectedSquare, boardState });
-    if (isEmptyBoardSquare(clickedSquareIdentifier, boardState) && legalMoves.includes(clickedSquareIdentifier)) {
-      console.log("legal move selected!", clickedSquareIdentifier)
+    if (legalMoves.includes(clickedSquareIdentifier)) {
+      setBoardState({
+        ...boardState,
+        [selectedSquare]: { marbleColor: null },
+        [clickedSquareIdentifier]: { marbleColor: whoseTurn },
+      });
+      setSelectedSquare(null);
+      const idx = PLAYERS.indexOf(whoseTurn)
+      setWhoseTurn(idx === PLAYERS.length - 1 ? PLAYERS[0] : PLAYERS[idx + 1])
     }
   }
 
