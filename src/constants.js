@@ -1,4 +1,3 @@
-export const SQUARES = {};
 export const SQUARE_COORDINATES = [
   "A13",
   "B12", "B14",
@@ -18,16 +17,30 @@ export const SQUARE_COORDINATES = [
   "P12", "P14",
   "Q13",
 ]
+
+export const START_COORDINATES_BOTTOM = ['A13', 'G11', 'K13', 'G7', 'I11', 'H8', 'H10', 'H12', 'D14', 'D16'];
+export const START_COORDINATES_TOP = ['Q13', 'P12', 'P14', 'O11', 'O13', 'O15', 'N10', 'N12', 'N14', 'N16'];
+export const START_COORDINATES_TOP_LEFT = ['M1', 'M3', 'M5', 'M7', 'L2', 'L4', 'L6', 'K3', 'K5', 'J4'];
+export const START_COORDINATES_TOP_RIGHT = ['M19', 'M21', 'M23', 'M25', 'L20', 'L22', 'L24', 'K21', 'K23', 'J22'];
+export const START_COORDINATES_BOTTOM_LEFT = ['E1', 'E3', 'E5', 'E7', 'F2', 'F4', 'F6', 'G3', 'G5', 'H4'];
+export const START_COORDINATES_BOTTOM_RIGHT = ['E19', 'E21', 'E23', 'E25', 'F20', 'F22', 'F24', 'G21', 'G23', 'H22'];
+
+export const PLAYERS = ['red', 'blue', 'green', 'yellow', 'purple', 'white'];
+
+export const INITIAL_BOARD_STATE = {};
 SQUARE_COORDINATES.forEach((sq) => {
   const squareObj = {
     marbleColor: null,
   }
-  SQUARES[sq] = squareObj;
+  INITIAL_BOARD_STATE[sq] = squareObj;
 });
-
-export const BOTTOM_PLAYER_START_COORDINATES = ['A13', 'G11', 'K13', 'G7', 'I11', 'H8', 'H10', 'H12', 'D14', 'D16'];
-export const TOP_PLAYER_START_COORDINATES = ['Q13', 'P12', 'P14', 'O11', 'O13', 'O15', 'N10', 'N12', 'N14', 'N16'];
-export const TOP_LEFT_PLAYER_START_COORDINATES = ['M1', 'M3', 'M5', 'M7', 'L2', 'L4', 'L6', 'K3', 'K5', 'J4']
-export const TOP_RIGHT_PLAYER_START_COORDINATES = ['M19', 'M21', 'M23', 'M25', 'L20', 'L22', 'L24', 'K21', 'K23', 'J22']
-export const BOTTOM_LEFT_PLAYER_START_COORDINATES = ['E1', 'E3', 'E5', 'E7', 'F2', 'F4', 'F6', 'G3', 'G5', 'H4']
-export const BOTTOM_RIGHT_PLAYER_START_COORDINATES = ['E19', 'E21', 'E23', 'E25', 'F20', 'F22', 'F24', 'G21', 'G23', 'H22']
+[
+  START_COORDINATES_BOTTOM,
+  START_COORDINATES_TOP,
+  START_COORDINATES_TOP_LEFT,
+  START_COORDINATES_TOP_RIGHT,
+  START_COORDINATES_BOTTOM_LEFT,
+  START_COORDINATES_BOTTOM_RIGHT,
+].forEach((coordinateList, index) => {
+  coordinateList.forEach(c => INITIAL_BOARD_STATE[c].marbleColor = PLAYERS[index]);
+})
